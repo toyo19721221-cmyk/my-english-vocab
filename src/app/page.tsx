@@ -1,3 +1,7 @@
+/**
+ * @version 1.1.0
+ * @description Vercelビルド詰まり解消・強制中央寄せ・和訳非表示の安定版
+ */
 "use client";
 import { useState, useEffect } from "react";
 import Link from "next/link";
@@ -26,7 +30,7 @@ export default function StudyPage() {
   return (
     <main style={{ minHeight: '100vh', backgroundColor: '#f3f4f6', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px', color: 'black', fontFamily: 'sans-serif' }}>
       <div style={{ width: '100%', maxWidth: '400px', textAlign: 'center' }}>
-        <h1 style={{ fontSize: '2rem', fontWeight: 'bold', marginBottom: '20px' }}>VOCAB MASTER</h1>
+        <h1 style={{ fontSize: '2rem', fontWeight: 'bold', marginBottom: '20px' }}>VOCAB MASTER (v1.1.0)</h1>
 
         {displayWords.length > 0 ? (
           <div style={{ backgroundColor: 'white', borderRadius: '24px', padding: '40px', boxShadow: '0 10px 25px rgba(0,0,0,0.1)', minHeight: '400px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
