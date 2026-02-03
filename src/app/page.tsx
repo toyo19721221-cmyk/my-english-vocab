@@ -1,4 +1,4 @@
-"use center";
+"use client";
 import { useState, useEffect } from "react";
 import Link from "next/link";
 
@@ -57,7 +57,6 @@ export default function StudyPage() {
       <div className="w-full max-w-md flex flex-col items-center">
         <h1 className="text-3xl font-black mb-6 tracking-tighter">VOCAB MASTER</h1>
         
-        {/* 習得済みフィルターボタン */}
         <button 
           onClick={() => { setHideLearned(!hideLearned); setCurrentIndex(0); }}
           className={`mb-8 px-6 py-2 rounded-full text-xs font-bold border-2 transition-all ${
@@ -69,8 +68,6 @@ export default function StudyPage() {
 
         {displayWords.length > 0 ? (
           <div className="bg-white w-full rounded-[2.5rem] shadow-2xl p-10 flex flex-col items-center relative border border-gray-100 min-h-[550px]">
-            
-            {/* 削除ボタン：右上に配置 */}
             <button 
               onClick={() => deleteWord(displayWords[currentIndex].id)}
               className="absolute top-8 right-8 text-gray-200 hover:text-red-500 transition-colors"
@@ -84,7 +81,6 @@ export default function StudyPage() {
               {currentIndex + 1} / {displayWords.length}
             </span>
 
-            {/* LEARNEDボタン */}
             <button 
               onClick={() => toggleLearned(displayWords[currentIndex].id)}
               className={`mb-8 px-4 py-1.5 rounded-full text-[10px] font-black tracking-widest transition-all ${
@@ -94,7 +90,6 @@ export default function StudyPage() {
               {displayWords[currentIndex].isLearned ? "✓ LEARNED" : "NOT LEARNED"}
             </button>
 
-            {/* 単語本体と品詞 */}
             <h2 className="text-5xl font-black text-gray-900 mb-2 text-center break-all leading-tight">
               {displayWords[currentIndex].word}
             </h2>
@@ -102,10 +97,9 @@ export default function StudyPage() {
               [{displayWords[currentIndex].partOfSpeech}]
             </p>
 
-            {/* 詳細エリア：Answerを押すまで中身を空にする */}
             <div className="w-full flex-grow flex flex-col justify-center min-h-[180px]">
               {showDetail ? (
-                <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-300">
+                <div className="space-y-6">
                   <div className="text-3xl font-bold text-gray-800 text-center border-b-2 border-blue-500 pb-2 inline-block mx-auto">
                     {displayWords[currentIndex].meaning}
                   </div>
@@ -122,13 +116,11 @@ export default function StudyPage() {
                 </div>
               ) : (
                 <div className="flex flex-col items-center gap-2">
-                  <div className="w-12 h-1 bg-gray-100 rounded-full"></div>
                   <p className="text-gray-200 text-[10px] font-bold tracking-widest">TAP ANSWER TO REVEAL</p>
                 </div>
               )}
             </div>
 
-            {/* 操作ボタン */}
             <div className="w-full flex gap-4 mt-8">
               <button 
                 onClick={() => setShowDetail(!showDetail)} 
@@ -147,7 +139,7 @@ export default function StudyPage() {
         ) : (
           <div className="text-center p-12 bg-white rounded-3xl shadow-xl border border-gray-100">
             <p className="text-gray-400 font-medium mb-6">表示できる単語がありません</p>
-            <Link href="/add" className="bg-blue-500 text-white px-8 py-3 rounded-xl font-bold inline-block shadow-lg shadow-blue-100">
+            <Link href="/add" className="bg-blue-500 text-white px-8 py-3 rounded-xl font-bold inline-block">
               単語を登録する
             </Link>
           </div>
