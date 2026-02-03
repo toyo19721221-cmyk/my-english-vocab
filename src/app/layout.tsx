@@ -2,7 +2,6 @@ import "./globals.css";
 
 export const metadata = {
   title: "Vocab Master",
-  description: "Modern English Vocabulary App",
 };
 
 export default function RootLayout({
@@ -12,8 +11,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ja">
-      {/* className を指定して Tailwind が反応するようにします */}
-      <body className="bg-gray-50 min-h-screen">{children}</body>
+      {/* 直接 style を書いて、Tailwindが効かない時のバックアップをします */}
+      <body className="bg-gray-50" style={{ backgroundColor: '#f9fafb', margin: 0 }}>
+        {children}
+      </body>
     </html>
   );
 }
