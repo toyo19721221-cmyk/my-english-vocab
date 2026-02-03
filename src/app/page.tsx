@@ -53,7 +53,8 @@ export default function StudyPage() {
   };
 
   return (
-    <main className="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-4 text-black font-sans">
+    /* flex items-center justify-center で要素を画面のど真ん中に固定します */
+    <main className="min-h-screen bg-gray-50 flex items-center justify-center w-full p-4 text-black font-sans">
       <div className="w-full max-w-md flex flex-col items-center">
         <h1 className="text-4xl font-black mb-8 tracking-tighter italic">VOCAB MASTER</h1>
         
@@ -68,7 +69,7 @@ export default function StudyPage() {
 
         {displayWords.length > 0 ? (
           <div className="bg-white w-full rounded-[2.5rem] shadow-2xl p-10 flex flex-col items-center relative border border-gray-100 min-h-[550px]">
-            {/* --- ここが削除ボタン (SVG) です --- */}
+            {/* 🗑️ 削除ボタン */}
             <button 
               onClick={() => deleteWord(displayWords[currentIndex].id)}
               className="absolute top-8 right-8 text-gray-200 hover:text-red-500 transition-colors p-2"
@@ -78,7 +79,6 @@ export default function StudyPage() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
               </svg>
             </button>
-            {/* ---------------------------------- */}
 
             <span className="text-gray-300 text-[10px] font-black tracking-[0.2em] mb-4">
               {currentIndex + 1} / {displayWords.length}

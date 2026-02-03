@@ -1,3 +1,14 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-body { background-color: #f9fafb; color: black; }
+/* どんな環境でも強制的に画面中央に寄せるための設定 */
+body {
+  background-color: #f9fafb !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  min-height: 100vh !important;
+  margin: 0 !important;
+  color: black;
+}
