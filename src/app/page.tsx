@@ -3,13 +3,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 
 interface Word {
-  id: number;
-  word: string;
-  partOfSpeech: string;
-  meaning: string;
-  example: string;
-  exampleJp?: string;
-  isLearned?: boolean;
+  id: number; word: string; partOfSpeech: string; meaning: string; example: string; exampleJp?: string; isLearned?: boolean;
 }
 
 export default function StudyPage() {
@@ -28,15 +22,11 @@ export default function StudyPage() {
     localStorage.setItem("my-app-data", JSON.stringify(updatedWords));
   };
 
-  const displayWords = hideLearned 
-    ? words.filter(w => !w.isLearned) 
-    : words;
+  const displayWords = hideLearned ? words.filter(w => !w.isLearned) : words;
 
   const nextCard = () => {
     setShowDetail(false);
-    if (displayWords.length > 0) {
-      setCurrentIndex((prev) => (prev + 1) % displayWords.length);
-    }
+    if (displayWords.length > 0) setCurrentIndex((prev) => (prev + 1) % displayWords.length);
   };
 
   const deleteWord = (id: number) => {
@@ -53,104 +43,61 @@ export default function StudyPage() {
   };
 
   return (
-    /* flex items-center justify-center で要素を画面のど真ん中に固定します */
-    <main className="min-h-screen bg-gray-50 flex items-center justify-center w-full p-4 text-black font-sans">
-      <div className="w-full max-w-md flex flex-col items-center">
-        <h1 className="text-4xl font-black mb-8 tracking-tighter italic">VOCAB MASTER</h1>
+    /* 🎨 強制中央寄せ設定 */
+    <main style={{ minHeight: '100vh', backgroundColor: '#f9fafb', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px', fontFamily: 'sans-serif', color: 'black' }}>
+      <div style={{ width: '100%', maxWidth: '400px', textAlign: 'center' }}>
+        <h1 style={{ fontSize: '2.5rem', fontWeight: '900', marginBottom: '30px', fontStyle: 'italic' }}>VOCAB MASTER</h1>
         
         <button 
           onClick={() => { setHideLearned(!hideLearned); setCurrentIndex(0); }}
-          className={`mb-10 px-6 py-2 rounded-full text-xs font-bold border-2 transition-all ${
-            hideLearned ? "bg-black text-white border-black" : "bg-white text-gray-400 border-gray-200 shadow-sm"
-          }`}
+          style={{ marginBottom: '40px', padding: '10px 25px', borderRadius: '50px', fontSize: '12px', fontWeight: 'bold', border: '2px solid #e5e7eb', backgroundColor: hideLearned ? 'black' : 'white', color: hideLearned ? 'white' : '#9ca3af', cursor: 'pointer' }}
         >
           {hideLearned ? "✓ 習得済みを非表示中" : "習得済みを表示中"}
         </button>
 
         {displayWords.length > 0 ? (
-          <div className="bg-white w-full rounded-[2.5rem] shadow-2xl p-10 flex flex-col items-center relative border border-gray-100 min-h-[550px]">
-            {/* 🗑️ 削除ボタン */}
-            <button 
-              onClick={() => deleteWord(displayWords[currentIndex].id)}
-              className="absolute top-8 right-8 text-gray-200 hover:text-red-500 transition-colors p-2"
-              title="削除"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-              </svg>
+          /* 🎨 強制カードデザイン */
+          <div style={{ backgroundColor: 'white', borderRadius: '40px', boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.1)', padding: '40px', position: 'relative', border: '1px solid #f3f4f6', minHeight: '500px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            
+            <button onClick={() => deleteWord(displayWords[currentIndex].id)} style={{ position: 'absolute', top: '30px', right: '30px', color: '#e5e7eb', background: 'none', border: 'none', cursor: 'pointer' }}>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
             </button>
 
-            <span className="text-gray-300 text-[10px] font-black tracking-[0.2em] mb-4">
-              {currentIndex + 1} / {displayWords.length}
-            </span>
+            <span style={{ color: '#d1d5db', fontSize: '10px', fontWeight: '900', letterSpacing: '0.2em', marginBottom: '15px' }}>{currentIndex + 1} / {displayWords.length}</span>
 
-            <button 
-              onClick={() => toggleLearned(displayWords[currentIndex].id)}
-              className={`mb-8 px-4 py-1.5 rounded-full text-[10px] font-black tracking-widest transition-all ${
-                displayWords[currentIndex].isLearned ? "bg-green-500 text-white shadow-lg shadow-green-100" : "bg-gray-100 text-gray-400"
-              }`}
-            >
+            <button onClick={() => toggleLearned(displayWords[currentIndex].id)} style={{ marginBottom: '30px', padding: '6px 15px', borderRadius: '50px', fontSize: '10px', fontWeight: '900', border: 'none', backgroundColor: displayWords[currentIndex].isLearned ? '#22c55e' : '#f3f4f6', color: displayWords[currentIndex].isLearned ? 'white' : '#9ca3af', cursor: 'pointer' }}>
               {displayWords[currentIndex].isLearned ? "✓ LEARNED" : "NOT LEARNED"}
             </button>
 
-            <h2 className="text-5xl font-black text-gray-900 mb-2 text-center break-all leading-tight">
-              {displayWords[currentIndex].word}
-            </h2>
-            <p className="text-blue-500 font-bold text-xs mb-10 tracking-[0.15em] uppercase">
-              [{displayWords[currentIndex].partOfSpeech}]
-            </p>
+            <h2 style={{ fontSize: '3rem', fontWeight: '900', color: '#111827', margin: '0 0 10px 0' }}>{displayWords[currentIndex].word}</h2>
+            <p style={{ color: '#3b82f6', fontWeight: 'bold', fontSize: '12px', marginBottom: '40px', textTransform: 'uppercase' }}>[{displayWords[currentIndex].partOfSpeech}]</p>
 
-            <div className="w-full flex-grow flex flex-col justify-center min-h-[180px]">
+            <div style={{ width: '100%', flexGrow: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
               {showDetail ? (
-                <div className="space-y-6">
-                  <div className="text-3xl font-bold text-gray-800 text-center border-b-2 border-blue-500 pb-2 inline-block mx-auto">
-                    {displayWords[currentIndex].meaning}
-                  </div>
-                  <div className="bg-gray-50 p-5 rounded-2xl border border-gray-100">
-                    <p className="text-gray-600 italic text-sm text-center mb-2 leading-relaxed">
-                      "{displayWords[currentIndex].example}"
-                    </p>
-                    {displayWords[currentIndex].exampleJp && (
-                      <p className="text-gray-400 text-xs text-center font-medium">
-                        {displayWords[currentIndex].exampleJp}
-                      </p>
-                    )}
+                <div style={{ animation: 'fadeIn 0.3s' }}>
+                  <div style={{ fontSize: '1.8rem', fontWeight: 'bold', color: '#1f2937', marginBottom: '20px' }}>{displayWords[currentIndex].meaning}</div>
+                  <div style={{ backgroundColor: '#f9fafb', padding: '20px', borderRadius: '20px', fontSize: '14px', color: '#4b5563', fontStyle: 'italic' }}>
+                    "{displayWords[currentIndex].example}"
                   </div>
                 </div>
               ) : (
-                <div className="flex flex-col items-center">
-                  <p className="text-gray-200 text-[10px] font-bold tracking-widest">TAP ANSWER TO REVEAL</p>
-                </div>
+                <p style={{ color: '#e5e7eb', fontSize: '10px', fontWeight: 'bold', letterSpacing: '0.1em' }}>TAP ANSWER TO REVEAL</p>
               )}
             </div>
 
-            <div className="w-full flex gap-4 mt-8">
-              <button 
-                onClick={() => setShowDetail(!showDetail)} 
-                className="flex-1 py-4 bg-gray-100 text-gray-500 rounded-2xl font-bold hover:bg-gray-200 transition-colors"
-              >
-                {showDetail ? "Hide" : "Answer"}
-              </button>
-              <button 
-                onClick={nextCard} 
-                className="flex-1 py-4 bg-black text-white rounded-2xl font-bold shadow-xl hover:opacity-80 active:scale-95 transition-all"
-              >
-                Next
-              </button>
+            <div style={{ width: '100%', display: 'flex', gap: '15px', marginTop: '30px' }}>
+              <button onClick={() => setShowDetail(!showDetail)} style={{ flex: 1, padding: '15px', backgroundColor: '#f3f4f6', border: 'none', borderRadius: '15px', fontWeight: 'bold', color: '#6b7280', cursor: 'pointer' }}>{showDetail ? "Hide" : "Answer"}</button>
+              <button onClick={nextCard} style={{ flex: 1, padding: '15px', backgroundColor: 'black', border: 'none', borderRadius: '15px', fontWeight: 'bold', color: 'white', cursor: 'pointer' }}>Next</button>
             </div>
           </div>
         ) : (
-          <div className="text-center p-12 bg-white rounded-3xl shadow-xl border border-gray-100">
-            <p className="text-gray-400 font-medium mb-6">表示できる単語がありません</p>
-            <Link href="/add" className="bg-blue-500 text-white px-8 py-3 rounded-xl font-bold inline-block shadow-lg shadow-blue-100">
-              単語を登録する
-            </Link>
+          <div style={{ backgroundColor: 'white', padding: '50px', borderRadius: '30px', boxShadow: '0 10px 25px rgba(0,0,0,0.05)' }}>
+            <p style={{ color: '#9ca3af', marginBottom: '20px' }}>表示できる単語がありません</p>
+            <Link href="/add" style={{ backgroundColor: '#3b82f6', color: 'white', padding: '12px 25px', borderRadius: '12px', textDecoration: 'none', fontWeight: 'bold', display: 'inline-block' }}>単語を登録する</Link>
           </div>
         )}
         
-        <Link href="/add" className="mt-12 text-gray-400 text-[10px] font-black tracking-widest hover:text-black transition-colors uppercase">
-          ＋ 一括登録・追加
-        </Link>
+        <Link href="/add" style={{ marginTop: '50px', display: 'block', color: '#9ca3af', fontSize: '10px', fontWeight: '900', textDecoration: 'none', letterSpacing: '0.1em' }}>＋ 一括登録・追加</Link>
       </div>
     </main>
   );
