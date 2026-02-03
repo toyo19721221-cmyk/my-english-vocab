@@ -1,9 +1,8 @@
 import "./globals.css";
-import type { Metadata } from "next";
 
-export const metadata: Metadata = {
+export const metadata = {
   title: "Vocab Master",
-  description: "Simple English vocabulary app",
+  description: "Modern English Vocabulary App",
 };
 
 export default function RootLayout({
@@ -13,7 +12,8 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ja">
-      <body>{children}</body>
+      {/* className を指定して Tailwind が反応するようにします */}
+      <body className="bg-gray-50 min-h-screen">{children}</body>
     </html>
   );
 }
