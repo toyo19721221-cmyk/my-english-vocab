@@ -40,121 +40,90 @@ export default function StudyPage() {
   };
 
   const deleteWord = (id: number) => {
-    if (confirm("この単語を削除してもよろしいですか？")) {
+    if (confirm("この単語を削除しますか？")) {
       const updated = words.filter(w => w.id !== id);
       saveToStorage(updated);
-      if (currentIndex >= updated.length && updated.length > 0) {
-        setCurrentIndex(0);
-      }
+      if (currentIndex >= updated.length && updated.length > 0) setCurrentIndex(0);
     }
   };
 
   const toggleLearned = (id: number) => {
-    const updated = words.map(w => 
-      w.id === id ? { ...w, isLearned: !w.isLearned } : w
-    );
+    const updated = words.map(w => w.id === id ? { ...w, isLearned: !w.isLearned } : w);
     saveToStorage(updated);
   };
 
   return (
-    <main className="min-h-screen bg-gray-50 p-6 flex flex-col items-center justify-center text-black font-sans">
-      <h1 className="text-3xl font-black mb-4 tracking-tighter">VOCAB MASTER</h1>
-      
-      <div className="mb-6">
+    <main className="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-4 text-black font-sans">
+      <div className="w-full max-w-md flex flex-col items-center">
+        <h1 className="text-3xl font-black mb-6 tracking-tighter">VOCAB MASTER</h1>
+        
         <button 
-          onClick={() => {
-            setHideLearned(!hideLearned);
-            setCurrentIndex(0);
-          }}
-          className={`px-4 py-2 rounded-full text-xs font-bold border-2 transition-all ${
-            hideLearned ? "bg-black text-white border-black" : "bg-white text-gray-400 border-gray-200"
+          onClick={() => { setHideLearned(!hideLearned); setCurrentIndex(0); }}
+          className={`mb-8 px-6 py-2 rounded-full text-xs font-bold border-2 transition-all ${
+            hideLearned ? "bg-black text-white border-black" : "bg-white text-gray-400 border-gray-200 shadow-sm"
           }`}
         >
           {hideLearned ? "✓ 習得済みを非表示中" : "習得済みを表示中"}
         </button>
-      </div>
 
-      {displayWords.length > 0 ? (
-        <div className="bg-white p-10 rounded-3xl shadow-2xl w-full max-w-sm min-h-[500px] flex flex-col justify-between border border-gray-100 relative">
-          
-          <button 
-            onClick={() => deleteWord(displayWords[currentIndex].id)}
-            className="absolute top-6 right-6 text-gray-200 hover:text-red-500 transition-colors"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-            </svg>
-          </button>
+        {displayWords.length > 0 ? (
+          <div className="bg-white w-full rounded-[2rem] shadow-2xl p-10 flex flex-col items-center relative border border-gray-100 min-h-[520px]">
+            <button 
+              onClick={() => deleteWord(displayWords[currentIndex].id)}
+              className="absolute top-6 right-6 text-gray-200 hover:text-red-500 transition-colors"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+              </svg>
+            </button>
 
-          <div className="text-center mt-4">
-            <p className="text-gray-300 text-[10px] font-bold mb-4 uppercase tracking-[0.2em]">
+            <span className="text-gray-300 text-[10px] font-black tracking-widest mb-4">
               {currentIndex + 1} / {displayWords.length}
-            </p>
-            
+            </span>
+
             <button 
               onClick={() => toggleLearned(displayWords[currentIndex].id)}
-              className={`mb-6 inline-flex items-center px-4 py-1.5 rounded-full text-[10px] font-black tracking-widest transition-all ${
-                displayWords[currentIndex].isLearned 
-                  ? "bg-green-500 text-white shadow-lg shadow-green-100" 
-                  : "bg-gray-100 text-gray-400"
+              className={`mb-6 px-4 py-1.5 rounded-full text-[10px] font-black tracking-tighter transition-all ${
+                displayWords[currentIndex].isLearned ? "bg-green-500 text-white" : "bg-gray-100 text-gray-400"
               }`}
             >
               {displayWords[currentIndex].isLearned ? "✓ LEARNED" : "NOT LEARNED"}
             </button>
 
-            <h2 className="text-5xl font-extrabold text-gray-900 mb-2 break-all">{displayWords[currentIndex].word}</h2>
-            <p className="text-blue-500 font-bold text-xs uppercase tracking-widest italic">
-              {displayWords[currentIndex].partOfSpeech}
-            </p>
-          </div>
+            <h2 className="text-5xl font-black text-gray-900 mb-2 text-center break-all">{displayWords[currentIndex].word}</h2>
+            <p className="text-blue-500 font-bold text-sm mb-10 italic">[{displayWords[currentIndex].partOfSpeech}]</p>
 
-          <div className="min-h-[160px] flex items-center justify-center">
-            {showDetail && (
-              <div className="w-full space-y-5 text-center animate-in fade-in zoom-in duration-300">
-                <div className="text-3xl font-bold text-gray-800 border-b-2 border-blue-500 pb-2 inline-block">
-                  {displayWords[currentIndex].meaning}
+            {/* Answerを押すまでここは絶対に表示されない */}
+            <div className="w-full flex-grow flex flex-col justify-center">
+              {showDetail && (
+                <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-300">
+                  <div className="text-3xl font-bold text-gray-800 text-center">{displayWords[currentIndex].meaning}</div>
+                  <div className="bg-blue-50/50 p-5 rounded-2xl border border-blue-100/50">
+                    <p className="text-gray-600 italic text-sm text-center mb-2 leading-relaxed">"{displayWords[currentIndex].example}"</p>
+                    {displayWords[currentIndex].exampleJp && <p className="text-gray-400 text-xs text-center font-medium">{displayWords[currentIndex].exampleJp}</p>}
+                  </div>
                 </div>
-                <div className="bg-gray-50 p-4 rounded-2xl border border-gray-100">
-                  <p className="text-gray-600 italic text-sm mb-2 leading-relaxed">
-                    "{displayWords[currentIndex].example}"
-                  </p>
-                  {displayWords[currentIndex].exampleJp && (
-                    <p className="text-gray-400 text-xs font-medium">
-                      {displayWords[currentIndex].exampleJp}
-                    </p>
-                  )}
-                </div>
-              </div>
-            )}
-          </div>
+              )}
+            </div>
 
-          <div className="flex gap-4 w-full mt-8">
-            <button 
-              onClick={() => setShowDetail(!showDetail)} 
-              className="flex-1 py-4 bg-gray-100 text-gray-600 rounded-2xl font-bold hover:bg-gray-200 transition-colors"
-            >
-              {showDetail ? "Hide" : "Answer"}
-            </button>
-            <button 
-              onClick={nextCard} 
-              className="flex-1 py-4 bg-black text-white rounded-2xl font-bold shadow-xl hover:bg-gray-800 transition-all active:scale-95"
-            >
-              Next
-            </button>
+            <div className="w-full flex gap-4 mt-8">
+              <button onClick={() => setShowDetail(!showDetail)} className="flex-1 py-4 bg-gray-100 text-gray-500 rounded-2xl font-bold hover:bg-gray-200 transition-colors">
+                {showDetail ? "Hide" : "Answer"}
+              </button>
+              <button onClick={nextCard} className="flex-1 py-4 bg-black text-white rounded-2xl font-bold shadow-xl hover:opacity-80 active:scale-95 transition-all">
+                Next
+              </button>
+            </div>
           </div>
-        </div>
-      ) : (
-        <div className="text-center bg-white p-10 rounded-3xl shadow-xl border border-gray-100">
-          <p className="mb-6 text-gray-400 font-medium">表示できる単語がありません</p>
-          <Link href="/add" className="bg-blue-500 text-white px-8 py-3 rounded-xl font-bold shadow-lg shadow-blue-100 inline-block hover:bg-blue-600 transition-all">
-            単語を登録する
-          </Link>
-        </div>
-      )}
-      
-      <Link href="/add" className="mt-12 text-gray-400 text-xs font-bold hover:text-black transition-colors uppercase tracking-widest">
-        ＋ 一括登録・追加
-      </Link>
+        ) : (
+          <div className="text-center p-12 bg-white rounded-3xl shadow-xl">
+            <p className="text-gray-400 font-medium mb-6">表示できる単語がありません</p>
+            <Link href="/add" className="bg-blue-500 text-white px-8 py-3 rounded-xl font-bold inline-block">登録画面へ</Link>
+          </div>
+        )}
+        
+        <Link href="/add" className="mt-12 text-gray-400 text-[10px] font-black tracking-widest hover:text-black transition-colors">＋ 一括登録・追加</Link>
+      </div>
     </main>
   );
 }
