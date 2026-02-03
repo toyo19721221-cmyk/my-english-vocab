@@ -23,7 +23,7 @@ export default function StudyPage() {
       try {
         setWords(JSON.parse(savedWords));
       } catch (e) {
-        console.error("データの読み込みに失敗しました", e);
+        console.error(e);
       }
     }
   }, []);
@@ -37,7 +37,7 @@ export default function StudyPage() {
 
   return (
     <main className="min-h-screen bg-gray-50 p-6 flex flex-col items-center justify-center font-sans">
-      <h1 className="text-4xl font-black text-black mb-12 tracking-tighter">VOCAB MASTER</h1>
+      <h1 className="text-4xl font-black text-black mb-12 tracking-tighter text-center">VOCAB MASTER</h1>
       {words.length > 0 ? (
         <div className="w-full max-w-sm">
           <div className="bg-white rounded-3xl shadow-2xl p-10 min-h-[450px] flex flex-col items-center justify-between border border-gray-100">
@@ -46,17 +46,15 @@ export default function StudyPage() {
               <h2 className="text-5xl font-bold text-gray-900 mb-2">{words[currentIndex].word}</h2>
               <p className="text-blue-500 font-bold text-sm uppercase">[{words[currentIndex].partOfSpeech || "N/A"}]</p>
             </div>
-            <div className="w-full">
-              {showDetail && (
-                <div className="space-y-6 text-center">
-                  <div className="text-2xl font-bold text-gray-800 py-2 border-y border-gray-50">{words[currentIndex].meaning}</div>
-                  <div className="text-left bg-gray-50 p-4 rounded-xl">
-                    <p className="text-gray-600 italic text-sm mb-1">"{words[currentIndex].example}"</p>
-                    <p className="text-gray-400 text-xs">{words[currentIndex].exampleJp}</p>
-                  </div>
+            {showDetail && (
+              <div className="space-y-6 text-center w-full">
+                <div className="text-2xl font-bold text-gray-800 py-2 border-y border-gray-50">{words[currentIndex].meaning}</div>
+                <div className="text-left bg-gray-50 p-4 rounded-xl">
+                  <p className="text-gray-600 italic text-sm mb-1">"{words[currentIndex].example}"</p>
+                  <p className="text-gray-400 text-xs">{words[currentIndex].exampleJp}</p>
                 </div>
-              )}
-            </div>
+              </div>
+            )}
             <div className="flex gap-3 w-full mt-8">
               <button onClick={() => setShowDetail(!showDetail)} className="flex-1 py-4 bg-gray-100 text-gray-900 rounded-2xl font-bold hover:bg-gray-200 transition">
                 {showDetail ? "Hide" : "Answer"}
@@ -66,7 +64,9 @@ export default function StudyPage() {
           </div>
         </div>
       ) : (
-        <div className="text-center p-10 bg-white rounded-3xl shadow-sm"><p className="text-gray-400 mb-6">まだ単語がありません</p></div>
+        <div className="text-center p-10 bg-white rounded-3xl shadow-sm">
+          <p className="text-gray-400 mb-6">まだ単語がありません</p>
+        </div>
       )}
       <Link href="/add" className="mt-12 text-gray-400 hover:text-black font-bold text-sm transition border-b border-gray-300 pb-1">
         ＋ 新しい単語を登録する
