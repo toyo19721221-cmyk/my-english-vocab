@@ -98,6 +98,7 @@ export default function StudyPage() {
             </p>
 
             <div className="w-full flex-grow flex flex-col justify-center min-h-[180px]">
+              {/* ポイント：showDetail が true の時だけ和訳(meaning)を表示する */}
               {showDetail ? (
                 <div className="space-y-6">
                   <div className="text-3xl font-bold text-gray-800 text-center border-b-2 border-blue-500 pb-2 inline-block mx-auto">
@@ -139,7 +140,7 @@ export default function StudyPage() {
         ) : (
           <div className="text-center p-12 bg-white rounded-3xl shadow-xl border border-gray-100">
             <p className="text-gray-400 font-medium mb-6">表示できる単語がありません</p>
-            <Link href="/add" className="bg-blue-500 text-white px-8 py-3 rounded-xl font-bold inline-block">
+            <Link href="/add" className="bg-blue-500 text-white px-8 py-3 rounded-xl font-bold inline-block shadow-lg shadow-blue-100">
               単語を登録する
             </Link>
           </div>
