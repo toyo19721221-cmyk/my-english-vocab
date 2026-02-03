@@ -1,103 +1,86 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 
-// 5項目（id, word, partOfSpeech, meaning, example, exampleJp）に対応した型定義
-interface Word {
-  id: number;
-  word: string;
-  partOfSpeech: string;
-  meaning: string;
-  example: string;
-  exampleJp: string;
-}
+export default function BulkAddPage() {
+  const [bulkText, setBulkText] = useState("");
+  const router = useRouter();
 
-export default function StudyPage() {
-  const [words, setWords] = useState<Word[]>([]);
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [showDetail, setShowDetail] = useState(false);
+  const handleBulkSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
 
-  // 初回読み込み時にローカルストレージからデータを取得
-  useEffect(() => {
+    if (!bulkText.trim()) {
+      alert("テキストを入力してください。");
+      return;
+    }
+
+    // 行ごとに分割して処理
+    const lines = bulkText.trim().split("\n");
+    const newWords = lines.map((line) => {
+      // カンマで分割（英語,品詞,意味,例文,例文訳）
+      const [word, partOfSpeech, meaning, example, exampleJp] = line.split(",").map(s => s.trim());
+      
+      return {
+        id: Date.now() + Math.random(), // 重複を避けるためのID
+        word: word || "",
+        partOfSpeech: partOfSpeech || "",
+        meaning: meaning || "",
+        example: example || "",
+        exampleJp: exampleJp || "",
+      };
+    }).filter(w => w.word && w.meaning); // 最低限、英語と意味がある行だけ採用
+
+    if (newWords.length === 0) {
+      alert("有効なデータが見つかりませんでした。形式を確認してください。");
+      return;
+    }
+
+    // ローカルストレージの既存データと結合
     const savedWords = localStorage.getItem("vocab-words");
-    if (savedWords) {
-      try {
-        setWords(JSON.parse(savedWords));
-      } catch (e) {
-        console.error("データの読み込みに失敗しました", e);
-      }
-    }
-  }, []);
+    const wordsList = savedWords ? JSON.parse(savedWords) : [];
+    const updatedList = [...wordsList, ...newWords];
 
-  const nextCard = () => {
-    setShowDetail(false);
-    if (words.length > 0) {
-      setCurrentIndex((prev) => (prev + 1) % words.length);
-    }
+    localStorage.setItem("vocab-words", JSON.stringify(updatedList));
+
+    alert(`${newWords.length} 件の単語を登録しました！`);
+    router.push("/");
   };
 
   return (
-    <main className="min-h-screen bg-gray-50 p-6 flex flex-col items-center justify-center font-sans">
-      {/* 黒くて太いスタイリッシュなロゴ */}
-      <h1 className="text-4xl font-black text-black mb-12 tracking-tighter">VOCAB MASTER</h1>
+    <main className="min-h-screen bg-white p-8 flex flex-col items-center font-sans">
+      <div className="w-full max-w-2xl">
+        <Link href="/" className="text-blue-500 text-sm font-bold mb-8 block">
+          ← 学習画面に戻る
+        </Link>
+        
+        <h1 className="text-2xl font-black text-black mb-4">一括登録 (Bulk Add)</h1>
+        <p className="text-gray-500 text-sm mb-6">
+          以下の形式で、1行に1単語ずつ入力してください：<br />
+          <code className="bg-gray-100 p-1 rounded">英語, 品詞, 意味, 例文, 例文訳</code>
+        </p>
 
-      {words.length > 0 ? (
-        <div className="w-full max-w-sm">
-          <div className="bg-white rounded-3xl shadow-2xl p-10 min-h-[450px] flex flex-col items-center justify-between border border-gray-100">
-            <div className="text-center w-full">
-              <p className="text-gray-300 text-xs font-bold mb-8 uppercase tracking-widest">
-                {currentIndex + 1} / {words.length}
-              </p>
-              <h2 className="text-5xl font-bold text-gray-900 mb-2">{words[currentIndex].word}</h2>
-              {/* 品詞を表示 */}
-              <p className="text-blue-500 font-bold text-sm uppercase">
-                [{words[currentIndex].partOfSpeech || "N/A"}]
-              </p>
-            </div>
-            
-            <div className="w-full">
-              {showDetail && (
-                <div className="space-y-6 text-center animate-in fade-in slide-in-from-bottom-2 duration-300">
-                  {/* 日本語訳 */}
-                  <div className="text-2xl font-bold text-gray-800 py-2 border-y border-gray-50">
-                    {words[currentIndex].meaning}
-                  </div>
-                  {/* 例文セクション */}
-                  <div className="text-left bg-gray-50 p-4 rounded-xl">
-                    <p className="text-gray-600 italic text-sm mb-1">"{words[currentIndex].example}"</p>
-                    <p className="text-gray-400 text-xs">{words[currentIndex].exampleJp}</p>
-                  </div>
-                </div>
-              )}
-            </div>
+        <form onSubmit={handleBulkSubmit} className="space-y-6">
+          <textarea
+            value={bulkText}
+            onChange={(e) => setBulkText(e.target.value)}
+            className="w-full h-80 p-4 border-2 border-black rounded-xl focus:outline-none font-mono text-sm"
+            placeholder="apple, 名詞, りんご, I ate an apple., 私はりんごを食べた。&#13;&#10;banana, 名詞, バナナ, This is a banana., これはバナナです。"
+          />
 
-            <div className="flex gap-3 w-full mt-8">
-              <button 
-                onClick={() => setShowDetail(!showDetail)} 
-                className="flex-1 py-4 bg-gray-100 text-gray-900 rounded-2xl font-bold hover:bg-gray-200 transition"
-              >
-                {showDetail ? "Hide" : "Answer"}
-              </button>
-              <button 
-                onClick={nextCard} 
-                className="flex-1 py-4 bg-black text-white rounded-2xl font-bold hover:bg-gray-800 transition"
-              >
-                Next
-              </button>
-            </div>
-          </div>
+          <button
+            type="submit"
+            className="w-full bg-black text-white py-5 rounded-2xl font-bold text-lg hover:bg-gray-800 transition shadow-lg"
+          >
+            一括登録を実行する
+          </button>
+        </form>
+
+        <div className="mt-8 p-4 bg-blue-50 rounded-xl text-blue-800 text-xs">
+          <strong>ヒント:</strong> ExcelやGoogleスプレッドシートで作ったリストをカンマ区切りで貼り付けると便利です。
         </div>
-      ) : (
-        <div className="text-center p-10 bg-white rounded-3xl shadow-sm">
-          <p className="text-gray-400 mb-6">まだ単語がありません</p>
-        </div>
-      )}
-
-      {/* 登録画面へのリンク */}
-      <Link href="/add" className="mt-12 text-gray-400 hover:text-black font-bold text-sm transition border-b border-gray-300 pb-1">
-        ＋ 新しい単語を登録する
-      </Link>
+      </div>
     </main>
   );
 }
