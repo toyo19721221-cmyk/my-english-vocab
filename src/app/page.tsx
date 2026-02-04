@@ -1,6 +1,6 @@
 /**
- * @version 1.4.0
- * @description メインの学習画面。コンテンツを上部に配置し、バージョンを最下部に固定。
+ * @version 1.4.1
+ * @description 例文の和訳表示および品詞の日本語表示に対応
  */
 "use client";
 import { useState, useEffect } from "react";
@@ -67,7 +67,10 @@ export default function StudyPage() {
               {showDetail ? (
                 <div>
                   <div style={{ fontSize: '1.5rem', fontWeight: 'bold', marginBottom: '10px', color: '#1f2937' }}>{words[currentIndex].meaning}</div>
-                  <div style={{ fontSize: '13px', color: '#6b7280', fontStyle: 'italic', lineHeight: '1.4' }}>"{words[currentIndex].example}"</div>
+                  <div style={{ fontSize: '13px', color: '#6b7280', fontStyle: 'italic', lineHeight: '1.4', marginBottom: '5px' }}>"{words[currentIndex].example}"</div>
+                  {words[currentIndex].exampleJp && (
+                    <div style={{ fontSize: '12px', color: '#9ca3af', lineHeight: '1.4' }}>（{words[currentIndex].exampleJp}）</div>
+                  )}
                 </div>
               ) : (
                 <div style={{ color: '#d1d5db', fontSize: '11px', letterSpacing: '0.1em', fontWeight: 'bold' }}>TAP ANSWER TO REVEAL</div>
@@ -90,7 +93,7 @@ export default function StudyPage() {
       </div>
 
       <footer style={{ marginTop: 'auto', padding: '20px 0', color: '#d1d5db', fontSize: '10px', fontWeight: 'bold', letterSpacing: '0.05em' }}>
-        VOCAB MASTER Ver 1.4.0
+        VOCAB MASTER Ver 1.4.1
       </footer>
     </main>
   );
