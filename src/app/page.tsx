@@ -1,6 +1,6 @@
 /**
- * @version 1.6.0
- * @description Next.jsの遷移システムを完全回避し、ブラウザの強制リロード移動を実装
+ * @version 1.6.1
+ * @description ビルドエラー(width重複)の修正と移動機能の再実装
  */
 "use client";
 import { useState } from "react";
@@ -9,10 +9,9 @@ export default function AddPage() {
   const [jsonInput, setJsonInput] = useState("");
   const [error, setError] = useState("");
 
-  // ブラウザを力ずくでトップへ飛ばす（履歴も残さない）
   const forceGoHome = () => {
     if (typeof window !== "undefined") {
-      window.location.replace(window.location.origin);
+      window.location.href = window.location.origin;
     }
   };
 
@@ -33,15 +32,15 @@ export default function AddPage() {
   };
 
   return (
-    <main style={{ minHeight: '100vh', backgroundColor: '#f3f4f6', display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '20px' }}>
+    <main style={{ minHeight: '100vh', backgroundColor: '#f3f4f6', display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '20px', color: 'black' }}>
       <div style={{ width: '100%', maxWidth: '500px' }}>
-        <h1 style={{ fontSize: '1.2rem', fontWeight: 'bold', marginBottom: '20px', textAlign: 'center' }}>一括登録 (v1.6.0)</h1>
+        <h1 style={{ fontSize: '1.2rem', fontWeight: 'bold', marginBottom: '20px', textAlign: 'center' }}>一括登録 (v1.6.1)</h1>
         
         <div style={{ backgroundColor: 'white', padding: '20px', borderRadius: '15px', boxShadow: '0 4px 10px rgba(0,0,0,0.05)' }}>
           <textarea
             value={jsonInput}
             onChange={(e) => setJsonInput(e.target.value)}
-            style={{ width: '100%', height: '300px', marginBottom: '15px', padding: '10px', borderRadius: '8px', border: '1px solid #ddd', width: '100%', display: 'block' }}
+            style={{ width: '100%', height: '300px', marginBottom: '15px', padding: '10px', borderRadius: '8px', border: '1px solid #ddd', display: 'block' }}
             placeholder="JSONデータを貼り付け"
           />
 
@@ -54,20 +53,15 @@ export default function AddPage() {
             データを上書き登録する
           </button>
 
-          {/* onClickとhrefの両方で「逃げ場」をなくす */}
-          <a 
-            href="/" 
-            onClick={(e) => { e.preventDefault(); forceGoHome(); }}
-            style={{ display: 'block', width: '100%', padding: '12px', backgroundColor: '#e5e7eb', color: '#4b5563', borderRadius: '12px', textDecoration: 'none', textAlign: 'center', fontSize: '14px', fontWeight: 'bold' }}
+          <button 
+            type="button"
+            onClick={forceGoHome}
+            style={{ display: 'block', width: '100%', padding: '12px', backgroundColor: '#e5e7eb', color: '#4b5563', borderRadius: '12px', border: 'none', textAlign: 'center', fontSize: '14px', fontWeight: 'bold', cursor: 'pointer' }}
           >
             キャンセルしてメイン画面へ
-          </a>
+          </button>
         </div>
       </div>
-
-      <footer style={{ marginTop: 'auto', padding: '20px', color: '#d1d5db', fontSize: '10px' }}>
-        VOCAB MASTER Add v1.6.0
-      </footer>
     </main>
   );
 }
