@@ -1,6 +1,6 @@
 /**
- * @version 1.3.0
- * @description レイアウトの調整：コンテンツの繰り上げとバージョン表記の最下部移動
+ * @version 1.4.0
+ * @description 上部タイトルを削除し、コンテンツを最上部へ配置。バージョンを最下部に固定。
  */
 "use client";
 import { useState, useEffect } from "react";
@@ -44,11 +44,10 @@ export default function StudyPage() {
   };
 
   return (
-    <main style={{ minHeight: '100vh', backgroundColor: '#f3f4f6', display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '20px', color: 'black', fontFamily: 'sans-serif', position: 'relative' }}>
+    <main style={{ minHeight: '100vh', backgroundColor: '#f3f4f6', display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '10px 20px', color: 'black', fontFamily: 'sans-serif', position: 'relative' }}>
       
-      {/* メインコンテンツエリア：上部に配置 */}
+      {/* メインコンテンツエリア：上部タイトルを削除し、さらに上へ */}
       <div style={{ width: '100%', maxWidth: '400px', textAlign: 'center', marginTop: '10px' }}>
-        <h1 style={{ fontSize: '1.6rem', fontWeight: 'bold', marginBottom: '15px', letterSpacing: '0.05em' }}>VOCAB MASTER</h1>
 
         {words.length > 0 ? (
           <div style={{ backgroundColor: 'white', borderRadius: '24px', padding: '30px', boxShadow: '0 8px 20px rgba(0,0,0,0.08)', minHeight: '420px', display: 'flex', flexDirection: 'column', alignItems: 'center', position: 'relative' }}>
@@ -63,13 +62,13 @@ export default function StudyPage() {
               {words[currentIndex].isLearned ? "✓ LEARNED" : "NOT LEARNED"}
             </button>
 
-            <h2 style={{ fontSize: '2.2rem', fontWeight: '900', margin: '5px 0', wordBreak: 'break-word' }}>{words[currentIndex].word}</h2>
-            <p style={{ color: '#3b82f6', fontWeight: 'bold', marginBottom: '20px', fontSize: '13px' }}>[{words[currentIndex].partOfSpeech}]</p>
+            <h2 style={{ fontSize: '2.4rem', fontWeight: '900', margin: '5px 0', wordBreak: 'break-word' }}>{words[currentIndex].word}</h2>
+            <p style={{ color: '#3b82f6', fontWeight: 'bold', marginBottom: '20px', fontSize: '14px' }}>[{words[currentIndex].partOfSpeech}]</p>
 
             <div style={{ flexGrow: 1, width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', textAlign: 'center' }}>
               {showDetail ? (
                 <div>
-                  <div style={{ fontSize: '1.4rem', fontWeight: 'bold', marginBottom: '10px', color: '#1f2937' }}>{words[currentIndex].meaning}</div>
+                  <div style={{ fontSize: '1.5rem', fontWeight: 'bold', marginBottom: '10px', color: '#1f2937' }}>{words[currentIndex].meaning}</div>
                   <div style={{ fontSize: '13px', color: '#6b7280', fontStyle: 'italic', lineHeight: '1.4' }}>"{words[currentIndex].example}"</div>
                 </div>
               ) : (
@@ -83,7 +82,7 @@ export default function StudyPage() {
             </div>
           </div>
         ) : (
-          <div style={{ backgroundColor: 'white', padding: '40px', borderRadius: '24px' }}>
+          <div style={{ backgroundColor: 'white', padding: '40px', borderRadius: '24px', marginTop: '20px' }}>
             <p style={{ color: '#9ca3af', marginBottom: '20px' }}>単語が登録されていません</p>
             <Link href="/add" style={{ color: '#3b82f6', textDecoration: 'none', fontWeight: 'bold' }}>＋ 単語を追加する</Link>
           </div>
@@ -92,9 +91,9 @@ export default function StudyPage() {
         <Link href="/add" style={{ marginTop: '20px', display: 'inline-block', color: '#9ca3af', fontSize: '12px', textDecoration: 'none', borderBottom: '1px solid #e5e7eb' }}>＋ 一括登録・管理</Link>
       </div>
 
-      {/* バージョン表記：最下部に固定 */}
+      {/* バージョン表記フッター */}
       <footer style={{ marginTop: 'auto', padding: '20px 0', color: '#d1d5db', fontSize: '10px', fontWeight: 'bold', letterSpacing: '0.05em' }}>
-        VOCAB MASTER Ver 1.3.0
+        VOCAB MASTER Ver 1.4.0
       </footer>
     </main>
   );
